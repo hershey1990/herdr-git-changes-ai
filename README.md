@@ -156,7 +156,7 @@ says **Not a git repository**.
 
 ## Compatibility
 
-- **Tested on:** Windows 11 ARM64 with Herdr Desktop 0.1.21, PowerShell 7,
+- **Tested on:** Windows 11 ARM64 with Herdr Desktop 0.1.16, PowerShell 7,
   Git for Windows, and the OpenCode CLI. Both the CLI path and the direct
   DeepSeek-style HTTP path were exercised.
 - **Operating system:** the mod is plain JavaScript on Herdr's gpui-kit and
