@@ -1,0 +1,11 @@
+{
+  "provider": "auto",
+  "model": "",
+  "api_key": "",
+  "base_url": "",
+  "language": "English",
+  "style": "conventional",
+  "max_diff_chars": 16000,
+  "max_output_tokens": 1024,
+  "timeout_ms": 180000
+}
