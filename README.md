@@ -8,6 +8,10 @@ to draft a commit message from the uncommitted changes, then puts the draft in
 the message field. It never stages or commits: you review it, edit it if you
 want, and press **Commit** yourself.
 
+Published for Herdr's gallery (the `herdr-mod` index): search **Changes AI** on
+[herdr.dev/mods](https://herdr.dev/mods?type=mods), or install it with the
+agent prompt below.
+
 ## What it does
 
 - Shows the focused pane's repository: changed files, per-file diffs and
