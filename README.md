@@ -181,7 +181,7 @@ Herdr's gallery installs mods with a prompt, not an installer. Paste this into
 an agent running inside Herdr:
 
 ```text
-Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/hershey1990/herdr-git-changes-ai
+Read ~/.config/herdr-app/AGENTS.md, then add this mod: https://github.com/hershey1990/herdr-git-changes-ai/tree/main
 ```
 
 The agent reads `RECIPE.md` and every file, tells you that the mod runs `git`
