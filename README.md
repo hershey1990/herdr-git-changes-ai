@@ -177,6 +177,14 @@ says **Not a git repository**.
 - **Remote spaces:** the repository is read on the machine that owns the pane.
   Direct API calls are made from the machine running Herdr.
 
+## Used by
+
+- [herdr-orca](https://github.com/hershey1990/herdr-orca) — an Orca-style
+  layout for Herdr Desktop that vendors `better-changes` (munza's panel) with
+  this mod's AI commit button and providers ported into it
+  (`mods/better-changes/ai.js`). Install that layout and you get this button
+  built in; this repo stays the standalone panel for any other layout.
+
 ## Install step by step
 
 ### The one-line way: ask your agent
