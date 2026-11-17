@@ -35,6 +35,19 @@ want, and press **Commit** yourself.
   - an installed and logged-in coding-agent CLI, or
   - an API key for DeepSeek or OpenCode Go.
 
+## Repository layout
+
+```text
+mods/changes-ai/      the mod: main.js, mod.json, changes.svg, config.example.json
+RECIPE.md             the brief another agent builds or installs it from
+preview.png           screenshot used by the gallery
+README.md             this file
+LICENSE               MIT
+```
+
+The repository is published in Herdr's gallery format: a `herdr-mod` topic,
+one folder per mod under `mods/`, no `layouts/` folder.
+
 ## AI providers
 
 ### 1. Coding-agent CLI (recommended; no key in this mod)
@@ -162,10 +175,29 @@ says **Not a git repository**.
 
 ## Install step by step
 
-Herdr Desktop has **no installer for mods**. `herdr plugin install` belongs to
-the Herdr TUI (`herdr-plugin.toml`) and does not install this. A mod is just a
-folder, so installing means copying it into Herdr's mods directory and pointing
-a layout at it.
+### The one-line way: ask your agent
+
+Herdr's gallery installs mods with a prompt, not an installer. Paste this into
+an agent running inside Herdr:
+
+```text
+Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/hershey1990/herdr-git-changes-ai
+```
+
+The agent reads `RECIPE.md` and every file, tells you that the mod runs `git`
+and an AI provider, copies `mods/changes-ai/` into `~/.config/herdr-app/mods/`,
+adds the layout block, and runs `herdr-app check`.
+
+### Why not `herdr install`
+
+There is no `herdr install` command. `herdr plugin install` exists, but it
+installs **Herdr TUI** plugins from a `herdr-plugin.toml` manifest; it does not
+place a Herdr Desktop mod. Desktop mods are plain folders under
+`~/.config/herdr-app/mods/`, so the manual steps below (or the agent prompt
+above) are the supported path.
+
+The repository follows the gallery layout: `mods/changes-ai/` holds the mod,
+and `RECIPE.md`, `preview.png`, `README.md` and `LICENSE` sit at the root.
 
 ### Windows
 
@@ -175,14 +207,15 @@ a layout at it.
    git clone git@github.com:hershey1990/herdr-git-changes-ai.git "$env:USERPROFILE\Develop\herdr-changes-ai"
    ```
 
-2. Copy the mod into Herdr's mods folder. Keep the folder name `changes-ai`,
-   because the layout references it by that name:
+2. Copy the mod folder into Herdr's mods folder. Keep the folder name
+   `changes-ai`, because the mod reads its config and the layout references it
+   by that name:
 
    ```powershell
-   $src = "$env:USERPROFILE\Develop\herdr-changes-ai"
+   $src = "$env:USERPROFILE\Develop\herdr-changes-ai\mods\changes-ai"
    $mod = "$env:USERPROFILE\.config\herdr-app\mods\changes-ai"
    New-Item -ItemType Directory -Force $mod | Out-Null
-   Copy-Item "$src\main.js","$src\mod.json","$src\changes.svg","$src\README.md" $mod -Force
+   Copy-Item "$src\main.js","$src\mod.json","$src\changes.svg","$src\config.example.json" $mod -Force
    ```
 
    Do not copy `config.json` over an existing one when updating.
@@ -197,31 +230,27 @@ a layout at it.
    Pick a provider and model. For a CLI, leave `api_key` empty. For
    `deepseek` or `opencode-go`, paste your key into `api_key`.
 
-4. Point a layout at the panel. If you already have a personal layout, change
-   its Changes block to:
+4. Point a layout at the panel. In your personal layout under
+   `%USERPROFILE%\.config\herdr-app\layouts\`, find the Changes block and set
+   its `content.mod`:
 
    ```json
    { "id": "changes", "type": "block", "content": { "mod": "changes-ai" } }
    ```
 
-   If you do not have one, copy the included example. It is a full clone of
-   Herdr's `main` layout with the panel visible and showing this mod:
-
-   ```powershell
-   $layouts = "$env:USERPROFILE\.config\herdr-app\layouts"
-   if (Test-Path "$layouts\main-plus.json") { Copy-Item "$layouts\main-plus.json" "$layouts\main-plus.backup.json" }
-   Copy-Item "$env:USERPROFILE\Develop\herdr-changes-ai\examples\main-plus.json" "$layouts\main-plus.json" -Force
-   ```
+   Keeping the block id `changes` means existing toggles and `panel-body`
+   references keep working. If your layout has no Changes block, ask your agent
+   to add one, or add a block with that content where you want the panel.
 
 5. Let Herdr load and check the mod:
 
    ```powershell
    herdr-app check "$mod"
-   herdr-app do layout.switch --name main-plus
+   herdr-app do layout.show --id panel
    ```
 
-   If `herdr-app` is not on `PATH`, use `Ctrl+Shift+L` in the app to switch
-   layouts, or restart Herdr.
+   If `herdr-app` is not on `PATH`, switch layouts with `Ctrl+Shift+L`, or
+   restart Herdr.
 
 6. Focus a terminal inside a Git repository with uncommitted changes, click
    **AI ✦**, review the draft and press **Commit**.
@@ -235,19 +264,17 @@ git clone git@github.com:hershey1990/herdr-git-changes-ai.git ~/Develop/herdr-ch
 
 mod="$HOME/.config/herdr-app/mods/changes-ai"
 mkdir -p "$mod"
-cp ~/Develop/herdr-changes-ai/main.js \
-   ~/Develop/herdr-changes-ai/mod.json \
-   ~/Develop/herdr-changes-ai/changes.svg \
-   ~/Develop/herdr-changes-ai/README.md "$mod/"
+cp ~/Develop/herdr-changes-ai/mods/changes-ai/main.js \
+   ~/Develop/herdr-changes-ai/mods/changes-ai/mod.json \
+   ~/Develop/herdr-changes-ai/mods/changes-ai/changes.svg \
+   ~/Develop/herdr-changes-ai/mods/changes-ai/config.example.json "$mod/"
 
 cp "$mod/config.example.json" "$mod/config.json"
 ${EDITOR:-nano} "$mod/config.json"
 
-mkdir -p "$HOME/.config/herdr-app/layouts"
-cp ~/Develop/herdr-changes-ai/examples/main-plus.json "$HOME/.config/herdr-app/layouts/main-plus.json"
-
+# Then set content.mod to "changes-ai" in a block of your layout.
 herdr-app check "$mod"
-herdr-app do layout.switch --name main-plus
+herdr-app do layout.show --id panel
 ```
 
 ### Updating
@@ -310,6 +337,8 @@ running app, because Herdr loads the copy in `mods/`.
   this is a clone (`mod.json` records `cloned_from`). It is safe to edit.
 - The panel ID stays `changes`; layouts and toggles that reference the
   original panel keep working.
+- The mod lives in `mods/changes-ai/` so Herdr's gallery can index it. If you
+  copy it to another folder name, update the `config.json` path in `main.js`.
 - `gpui-kit.d.ts` and `jsconfig.json` are generated by Herdr and ignored.
 
 ## License
